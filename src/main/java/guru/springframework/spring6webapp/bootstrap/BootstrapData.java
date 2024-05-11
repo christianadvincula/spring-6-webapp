@@ -24,36 +24,43 @@ public class BootstrapData implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Author firstAuthor = new Author();
-        firstAuthor.setFirstName("John");
-        firstAuthor.setLastName("Doe");
-        Author secondAuthor = new Author();
-        secondAuthor.setFirstName("Jane");
-        secondAuthor.setLastName("Doe");
-        Author savedAuthor = authorRepository.save(firstAuthor);
-        Author savedAuthor2 = authorRepository.save(secondAuthor);
 
         Book firstBook = new Book();
         firstBook.setTitle("First Book");
         firstBook.setIsbn("123456789");
+        Book savedBook = bookRepository.save(firstBook);
+
+        Author firstAuthor = new Author();
+        firstAuthor.setFirstName("John");
+        firstAuthor.setLastName("Doe");
+        Author savedAuthor = authorRepository.save(firstAuthor);
+
         Book secondBook = new Book();
         secondBook.setTitle("Second Book");
         secondBook.setIsbn("987654321");
-
-        Book savedBook = bookRepository.save(firstBook);
         Book savedBook2 = bookRepository.save(secondBook);
+        Author secondAuthor = new Author();
+        secondAuthor.setFirstName("Jane");
+        secondAuthor.setLastName("Doe");
+        Author savedAuthor2 = authorRepository.save(secondAuthor);
+
+        savedBook.getAuthors().add(savedAuthor);
+        savedAuthor.getBooks().add(savedBook);
+        savedBook2.getAuthors().add(savedAuthor2);
+        savedAuthor2.getBooks().add(savedBook2);
+
 
         Publisher publisher = new Publisher();
         publisher.setPublisherName("Publisher Name");
         Publisher savedPublisher = publisherRepository.save(publisher);
 
-        savedBook.getAuthors().add(savedAuthor);
-        savedBook2.getAuthors().add(savedAuthor2);
         savedBook.setPublisher(savedPublisher);
         savedBook2.setPublisher(savedPublisher);
 
-        savedBook = bookRepository.save(savedBook);
-        savedBook2 = bookRepository.save(savedBook2);
+        bookRepository.save(savedBook);
+        bookRepository.save(savedBook2);
+        authorRepository.save(savedAuthor);
+        authorRepository.save(savedAuthor2);
 
 
         System.out.println("In Bootstrap");
